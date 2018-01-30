@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CLibetpan",
+        "repositoryURL": "https://github.com/brian-schick/CLibetpan.git",
+        "state": {
+          "branch": "master",
+          "revision": "654890a763379767ca3f513cd9c872759a90ba50",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
