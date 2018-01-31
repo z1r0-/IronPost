@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 public struct FetchFlag: OptionSet {
     public let rawValue: Int
@@ -125,8 +125,8 @@ extension IndexSet {
         let result: UnsafeMutablePointer<mailimap_set> = mailimap_set_new_empty()
         
         rangeView.forEach { (range) in
-            let safeFirst = UInt32(truncatingBitPattern: range.startIndex)
-            let safeLast = UInt32(truncatingBitPattern: range.upperBound - 1)
+			let safeFirst = UInt32(truncatingIfNeeded: range.startIndex)
+			let safeLast = UInt32(truncatingIfNeeded: range.upperBound - 1)
 
             mailimap_set_add_interval(result, safeFirst, safeLast)
         }

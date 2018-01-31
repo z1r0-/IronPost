@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 public struct Address {
     public let email: String

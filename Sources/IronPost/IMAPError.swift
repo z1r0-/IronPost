@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 enum IMAPError {
     case undefined

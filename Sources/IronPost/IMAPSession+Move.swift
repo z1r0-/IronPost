@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 extension IMAPSession {
     func moveMessages(fromFolder: String, toFolder: String, uids: IndexSet) throws -> [Int: Int] {

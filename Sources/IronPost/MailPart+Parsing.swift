@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 public indirect enum MailPart {
     case single(id: String, mimeType: MimeType, mimeFields: MimeFields, data: MailData?)

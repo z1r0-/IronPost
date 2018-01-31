@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 extension String {
     static func fromZeroSizedCStringMimeHeader(_ bytes: UnsafeMutablePointer<Int8>?) -> String? {
@@ -94,11 +94,13 @@ private func listGenerator<Element>(unsafeList list: UnsafePointer<clist>, of: E
 
 private func arrayGenerator<Element>(unsafeArray array: UnsafePointer<carray>, of: Element.Type) -> AnyIterator<Element> {
     var idx: UInt32 = 0
-    let len = carray_count(array)
+	
+	let mutableArray = UnsafeMutablePointer(mutating: array)
+    let len = carray_count(mutableArray)
     return AnyIterator {
         guard idx < len else { return nil }
         defer { idx = idx + 1 }
-        return carray_get(array, idx).assumingMemoryBound(to: Element.self).pointee
+        return carray_get(mutableArray, idx).assumingMemoryBound(to: Element.self).pointee
     }
 }
 

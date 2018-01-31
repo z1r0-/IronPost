@@ -6,6 +6,8 @@
 //  Copyright © 2018 snips. All rights reserved.
 //
 
+import Foundation
+
 public protocol ResultProtocol {
 	associatedtype Value
 	associatedtype Error: Swift.Error

@@ -23,7 +23,8 @@
 //
 
 import Swift
-import libetpan
+import CLibEtPan
+import Foundation
 
 private typealias Progress = @convention(c) (Int, Int, UnsafeMutableRawPointer?) -> Void
 
@@ -73,8 +74,8 @@ final class IMAPSession {
         self.configuration = configuration
         
         // We need to give the progress callbacks to stream values to end user.
-        let _bodyProgress: Progress = { _ in }
-        let _itemsProgress: Progress = { _ in }
+		let _bodyProgress: Progress = { _,_,_  in }
+		let _itemsProgress: Progress = { _,_,_  in }
         mailimap_set_progress_callback(imap, _bodyProgress, _itemsProgress, nil)
     }
     

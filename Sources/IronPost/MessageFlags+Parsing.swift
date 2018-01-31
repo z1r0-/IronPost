@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 public struct MessageFlag: OptionSet {
     public let rawValue: Int

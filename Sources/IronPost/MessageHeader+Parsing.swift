@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 public typealias CustomHeader = (name: String, value: String)
 
@@ -166,10 +166,10 @@ private extension Date {
         }
         
         var imapDateTime: UnsafeMutablePointer<mailimap_date_time>? = nil
-        if mailimap_hack_date_time_parse(envelopeDate, &imapDateTime, 0, nil).toIMAPError == nil {
-            defer { mailimap_date_time_free(imapDateTime) }
-            return imapDateTime?.pointee.date
-        }
+		if mailimap_hack_date_time_parse(envelopeDate, &imapDateTime, 0, nil).toIMAPError == nil {
+			defer { mailimap_date_time_free(imapDateTime) }
+			return imapDateTime?.pointee.date
+		}
         
         return nil
     }

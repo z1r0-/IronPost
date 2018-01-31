@@ -23,32 +23,23 @@
 //
 
 import Foundation
-import libetpan
-import Security
+import CLibEtPan
 
-func checkCertificate(_ stream: UnsafeMutablePointer<mailstream>, hostname: String) -> Bool {
-    let cCerts = mailstream_get_certificate_chain(stream)
-    defer { mailstream_certificate_chain_free(cCerts) }
-    guard let actualCCerts = cCerts else {
-        print("warning: No certificate chain retrieved")
-        return false
+struct IMAPNamespaceItem {
+    let prefix: String
+    let delimiter: String
+}
+
+extension IMAPNamespaceItem {
+    init?(namespaceInfo: mailimap_namespace_info) {
+        guard let prefix = String.fromUTF8CString(namespaceInfo.ns_prefix) else { return nil }
+        let delimStr = [ namespaceInfo.ns_delimiter, 0 ]
+        guard let delimiter = String.fromUTF8CString(delimStr) else { return nil }
+        
+        self.init(prefix: prefix, delimiter: delimiter)
     }
-    
-    let certificates = sequence(actualCCerts, of: MMAPString.self)
-        .map { mmapString in
-            mmapString.str.withMemoryRebound(to: UInt8.self, capacity: 1, { CFDataCreate(nil, $0, mmapString.len) })
-        }
-        .flatMap { SecCertificateCreateWithData(nil, $0) }
-    
-    let policy = SecPolicyCreateSSL(true, hostname as CFString)
-    var trustCallback: SecTrust?
-    guard noErr == SecTrustCreateWithCertificates(certificates as CFTypeRef, policy, &trustCallback) else { return false }
-    guard let trust = trustCallback else { return false }
-    
-    var trustResult: SecTrustResultType = .invalid
-    guard noErr == SecTrustEvaluate(trust, &trustResult) else { return false }
-    switch trustResult {
-    case .unspecified, .proceed: return true
-    default: return false
-    }
+}
+
+struct IMAPNamespace {
+    let items: [IMAPNamespaceItem]
 }

@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 public typealias ContentDispositionAttribute = (name: String, value: String)
 

@@ -23,6 +23,36 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
-typealias IMAPLogger = @convention(c) (UnsafeMutablePointer<mailimap>?, Int32, UnsafePointer<CChar>?, Int, UnsafeMutableRawPointer?) -> Void
+extension IMAPSession {
+    func delete(folderNamed folderName: String) throws {
+        try select("INBOX")
+        try mailimap_delete(imap, folderName).toIMAPError?.check()
+    }
+    
+    func create(folderNamed folderName: String) throws {
+        try select("INBOX")
+        try mailimap_create(imap, folderName).toIMAPError?.check()
+    }
+    
+    func rename(folderNamed fromFolderName: String, to toFolderName: String) throws {
+        try select("INBOX")
+        try mailimap_rename(imap, fromFolderName, toFolderName).toIMAPError?.check()
+    }
+    
+    func subscribe(folderNamed folderName: String) throws {
+        try select("INBOX")
+        try mailimap_subscribe(imap, folderName).toIMAPError?.check()
+    }
+    
+    func unsubscribe(folderNamed folderName: String) throws {
+        try select("INBOX")
+        try mailimap_unsubscribe(imap, folderName).toIMAPError?.check()
+    }
+    
+    func expunge(folderNamed folderName: String) throws {
+        try select(folderName)
+        try mailimap_expunge(imap).toIMAPError?.check()
+    }
+}

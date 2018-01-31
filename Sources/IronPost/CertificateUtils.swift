@@ -23,36 +23,32 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
+import Security
 
-extension IMAPSession {
-    func delete(folderNamed folderName: String) throws {
-        try select("INBOX")
-        try mailimap_delete(imap, folderName).toIMAPError?.check()
+func checkCertificate(_ stream: UnsafeMutablePointer<mailstream>, hostname: String) -> Bool {
+    let cCerts = mailstream_get_certificate_chain(stream)
+    defer { mailstream_certificate_chain_free(cCerts) }
+    guard let actualCCerts = cCerts else {
+        print("warning: No certificate chain retrieved")
+        return false
     }
     
-    func create(folderNamed folderName: String) throws {
-        try select("INBOX")
-        try mailimap_create(imap, folderName).toIMAPError?.check()
-    }
+    let certificates = sequence(actualCCerts, of: MMAPString.self)
+        .map { mmapString in
+            mmapString.str.withMemoryRebound(to: UInt8.self, capacity: 1, { CFDataCreate(nil, $0, mmapString.len) })
+        }
+        .flatMap { SecCertificateCreateWithData(nil, $0) }
     
-    func rename(folderNamed fromFolderName: String, to toFolderName: String) throws {
-        try select("INBOX")
-        try mailimap_rename(imap, fromFolderName, toFolderName).toIMAPError?.check()
-    }
+    let policy = SecPolicyCreateSSL(true, hostname as CFString)
+    var trustCallback: SecTrust?
+    guard noErr == SecTrustCreateWithCertificates(certificates as CFTypeRef, policy, &trustCallback) else { return false }
+    guard let trust = trustCallback else { return false }
     
-    func subscribe(folderNamed folderName: String) throws {
-        try select("INBOX")
-        try mailimap_subscribe(imap, folderName).toIMAPError?.check()
-    }
-    
-    func unsubscribe(folderNamed folderName: String) throws {
-        try select("INBOX")
-        try mailimap_unsubscribe(imap, folderName).toIMAPError?.check()
-    }
-    
-    func expunge(folderNamed folderName: String) throws {
-        try select(folderName)
-        try mailimap_expunge(imap).toIMAPError?.check()
+    var trustResult: SecTrustResultType = .invalid
+    guard noErr == SecTrustEvaluate(trust, &trustResult) else { return false }
+    switch trustResult {
+    case .unspecified, .proceed: return true
+    default: return false
     }
 }

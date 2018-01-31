@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import libetpan
+import CLibEtPan
 
 public struct MimeFields {
     public fileprivate(set) var name: String? = nil
