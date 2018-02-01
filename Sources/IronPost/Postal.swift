@@ -282,7 +282,7 @@ public extension Postal {
 
 private extension Postal {
     
-	func doAsync<T, E: Error>(_ f: @escaping () throws -> T, completion: @escaping (PostalResult<T, E>) -> Void) {
+	func doAsync<T, E>(_ f: @escaping () throws -> T, completion: @escaping (PostalResult<T, E>) -> Void) {
 		completion(PostalResult<T, E>(attempt: f))
 	}
     
