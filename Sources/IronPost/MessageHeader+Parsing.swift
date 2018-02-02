@@ -167,13 +167,17 @@ private extension Date {
             defer { mailimf_date_time_free(imfDateTime) }
             return imfDateTime?.pointee.date
         }
+		
+		// 2018.02.02 -- Commenting this out to avoid compiler errors from missing C function.
+		// Worst case, we'll end up with missing dates.
+		// But this is only used in IMAP functionality, so we should presumably be ok for our SMTP-only use
         
-        var imapDateTime: UnsafeMutablePointer<mailimap_date_time>? = nil
-		if mailimap_hack_date_time_parse(envelopeDate, &imapDateTime, 0, nil).toIMAPError == nil {
-			defer { mailimap_date_time_free(imapDateTime) }
-			return imapDateTime?.pointee.date
-		}
-        
+//        var imapDateTime: UnsafeMutablePointer<mailimap_date_time>? = nil
+//		if mailimap_hack_date_time_parse(envelopeDate, &imapDateTime, 0, nil).toIMAPError == nil {
+//			defer { mailimap_date_time_free(imapDateTime) }
+//			return imapDateTime?.pointee.date
+//		}
+		
         return nil
     }
 }

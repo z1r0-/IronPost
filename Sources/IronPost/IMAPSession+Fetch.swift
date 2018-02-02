@@ -288,12 +288,16 @@ private extension String {
             guard let id = UInt32(str) else { return nil }
             partIdList.append(id)
         }
-        
+		
+		
         let list = clist_new()
         partIdList.forEach { id in
             let idPtr: UnsafeMutablePointer<UInt32> = .allocate(capacity: 1)
             idPtr.pointee = id
-            clist_append(list, idPtr)
+			
+			// 2018-02-02 Switching to clist_append_hack manually added to libetpan to resolve blocking compiler
+//			clist_append(list, idPtr)
+			clist_append_hack(list, idPtr)
         }
         
         return list

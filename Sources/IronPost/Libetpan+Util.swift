@@ -66,8 +66,13 @@ extension String {
 extension Sequence {
     func unreleasedClist<T>(_ transferOwnership: (Iterator.Element) -> UnsafeMutablePointer<T>) -> UnsafeMutablePointer<clist> {
         let list = clist_new()
+		
+		
         map(transferOwnership).forEach { (item: UnsafeMutablePointer<T>) in
-            clist_append(list, item)
+			
+			// 2018-02-02 Switching to clist_append_hack manually added to libetpan to resolve blocking compiler
+//			clist_append(list, item)
+            clist_append_hack(list, item)
         }
         return list!
     }
