@@ -9,6 +9,15 @@
           "revision": "8735a91d131bf128d962fd3b26c63395f57db24a",
           "version": null
         }
+      },
+      {
+        "package": "Result",
+        "repositoryURL": "https://github.com/brian-schick/Result.git",
+        "state": {
+          "branch": "master",
+          "revision": "4de74eb73d6a234548b1a8c2ffc665f576c77f4a",
+          "version": null
+        }
       }
     ]
   },

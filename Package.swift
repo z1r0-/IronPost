@@ -3,8 +3,6 @@
 
 import PackageDescription
 
-
-
 let package = Package(
     name: "IronPost",
     products: [
@@ -13,7 +11,8 @@ let package = Package(
             targets: ["IronPost"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/brian-schick/CLibetpan.git", .branch("master")),
+        .package(url : "https://github.com/brian-schick/Result.git",    .branch("master")),
+        .package(url : "https://github.com/brian-schick/CLibetpan.git", .branch("master")),
     ],
     targets: [
         .target(
@@ -21,6 +20,6 @@ let package = Package(
             dependencies: []),
         .target(
             name: "IronPost",
-            dependencies: ["CLibEtPan"]),
+            dependencies: ["Result", "CLibEtPan"]),
     ]
 )

@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import Result
 
 /// This class is the class where every request will be performed.
 open class Postal {
@@ -55,7 +56,7 @@ open class Postal {
 
 public extension Postal {
     public static let defaultTimeout: TimeInterval = 30
-    
+	
     /// Attemps a connection to the server
     ///
     /// - parameters:
