@@ -21,5 +21,8 @@ let package = Package(
         .target(
             name: "IronPost",
             dependencies: ["Result", "CLibEtPan"]),
+		.testTarget(
+			name: "IronPostTests",
+			dependencies: ["IronPost", "Result", "CLibEtPan"]),
     ]
 )
